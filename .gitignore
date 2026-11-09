@@ -4,12 +4,26 @@ venv/
 env/
 ENV/
 
-# Кэш Python
+# Секреты (шаблон .env.example оставляем в репозитории)
+*.env
+.env.*
+!.env.example
+
+# Кэш и артефакты Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
 *.pyd
 .Python
+*.egg-info/
+*.egg
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
 # IDE
 .vscode/
@@ -20,15 +34,24 @@ __pycache__/
 # Системные файлы
 .DS_Store
 Thumbs.db
+desktop.ini
 
-models/vosk-model-small-ru-0.22/
+# Локальные модели (Vosk, веса Sentence-Transformers и т.п.)
+models/
 
-# Файлы тестов
-test/__pycache__/
-tests/__pycache__/
+# Датасеты и дампы, скачанные в репозиторий
+data/
 
-# Загрузки torch hub (кэш моделей)
+# Кэш Hugging Face / torch / sentence-transformers
 .cache/
+hf_cache/
+huggingface/
+
+# Jupyter (EDA)
+.ipynb_checkpoints/
 
 # Логи
 *.log
+
+# Postgres (том Docker)
+pgdata/

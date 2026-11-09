@@ -1,46 +1,31 @@
-import time
-
-from src.assistant.context import AssistantContext
-from src.assistant.cooking_assistant import CookingAssistant
-from src.speech.speech_recognizer import SpeechRecognizer
-from src.speech.tts_engine import TTS
-from src.llm.llm_generator import LLMGenerator
+from src.agent.recipe_agent import RecipeAgent
+import logging
 
 def main():
-    context = AssistantContext()
-    llm = LLMGenerator()
-    assistant = CookingAssistant(context, llm=llm)
-    recognizer = SpeechRecognizer()
-    tts = TTS()
+    logging.basicConfig(level=logging.INFO)
+    print("Инициализация агента...")
+    agent = RecipeAgent()
 
-    print("Голосовой помощник запущен. Скажите \"Начать готовить...\"")
-
+    first_query = True      # Флаг первого запроса
+    # Бесконечный цикл для продолжения общения с агентом
     while True:
+        if first_query:
+            query = input("\nЧто вы желаете приготовить? (или 'выход' для завершения):\n")
+            first_query = False
 
-        # Проверка таймера
-        timer_msg = assistant.check_timer()
-        if timer_msg:
-            tts.speak(timer_msg)
-            # После сообщения о таймере продолжаем работу
-            continue
+        else:
+            query = input("\nЧто делаем дальше?\n")
 
-        # Распознавание речи
-        command_text = recognizer.recognize_from_microphone(duration=10, silence_timeout=2)
-        if command_text is None:
-            tts.speak("Комманда не опознана. Повторите, пожалуйста.")
-            continue
-
-        # Обработка команды
-        response = assistant.process_command(command_text)
-        if response:
-            tts.speak(response)
-
-        if "До свидания" in response:
-            print("Завершение работы.")
+        if query.lower() in ["выход", "exit", "quit"]:
+            print("\nЗавершение работы агента.\n")
             break
 
-        # Небольшая пауза перед следующим циклом
-        time.sleep(0.2)
+        if not query.strip():
+            print("Кажется, вы ничего не написали. Пожалуйста, введите запрос.")
+            continue
+        
+        answer = agent.get_answer(query)
+        print(f"Ответ: {answer}")
 
 if __name__ == "__main__":
     main()

@@ -40,5 +40,5 @@ def generate_answer(query: str, model: str, system_prompt: str, recipes: list[di
     messages.extend(history)
     messages.append({'role': 'user', 'content': user_content})
 
-    response = chat(model=model, messages=messages)
+    response = chat(model=model, messages=messages, options={"num_ctx": 8192},)
     return response.message.content

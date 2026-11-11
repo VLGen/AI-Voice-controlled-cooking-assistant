@@ -31,6 +31,7 @@ def search_recipes(query: str, model, limit=5) -> list[dict]:
                 rows = find_similar_recipes(cur, get_query_embedding(model, query), limit=limit)
                 logger.info("Запрос обработан.")
                 retriever_elements = []
+                # Преобразование результатов в словарь для дальнейшего использования
                 for row in rows:
                     res_dict = {"id": row[0], "name": row[1], "description": row[2], "distance": row[3]}
                     retriever_elements.append(res_dict)
